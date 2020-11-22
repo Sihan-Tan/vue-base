@@ -1,11 +1,7 @@
 const { resolve } = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
-const notifier = require('node-notifier');
 const argv = require('yargs-parser')(process.argv.slice(2));
 const _mode = argv.mode || 'development';
 const { merge } = require('webpack-merge');
@@ -19,7 +15,7 @@ const baseConfig = {
   output: {
     path: resolve(__dirname, 'dist/assets'),
     filename: 'js/[name]_[contenthash:5].js',
-    publicPath: isDev ? '/' : './',
+    publicPath: isDev ? '/' : './assets/',
     assetModuleFilename: 'js/[name]_[contenthash:5].[ext]',
   },
   resolve: {
@@ -92,37 +88,7 @@ const baseConfig = {
       },
     ],
   },
-  plugins: [
-    new VueLoaderPlugin(),
-    new HtmlWebpackPlugin({
-      template: 'public/dev.html',
-      filename: 'index.html',
-    }),
-    new FriendlyErrorsPlugin({
-      compilationSuccessInfo: {
-        notes: [
-          'Some additionnal notes to be displayed unpon successful compilation',
-        ],
-        messages: [
-          `You application is running here http://localhost:${mergeConfig.devServer.port}`,
-        ],
-      },
-      onErrors: function(severity, errors) {
-        if (severity !== 'error') {
-          return;
-        }
-        notifier.notify({
-          title: 'Webpack React',
-          message: 'Webpack Compile Error',
-          icon: '', // Absolute path (doesn't work on balloons)
-          sound: true, // Only Notification Center or Windows Toasters
-          wait: true, // Wait with callback, until user action is taken against notification, does not apply to Windows Toasters as they always wait or notify-send as it does not support the wait option
-        });
-      },
-      clearConsole: true,
-    }),
-    new ProgressBarPlugin(),
-  ],
+  plugins: [new VueLoaderPlugin(), new ProgressBarPlugin()],
 };
 // console.log(merge(baseConfig, mergeConfig));
 module.exports = merge(mergeConfig, baseConfig);
