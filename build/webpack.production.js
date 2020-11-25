@@ -41,9 +41,9 @@ const prodConfig = {
         minifyURLs: true,
       },
     }),
-    // new BundleAnalyzerPlugin({
-    //   analyzerMode: "static",
-    // }),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+    }),
   ],
   externals: {
     vue: 'Vue',
@@ -51,7 +51,7 @@ const prodConfig = {
     'vue-router': 'VueRouter',
   },
   optimization: {
-    minimize: true,
+    // minimize: true,
     minimizer: [
       new TerserPlugin({
         parallel: true, // 是否并行打包
