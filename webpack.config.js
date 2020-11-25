@@ -8,6 +8,20 @@ const { merge } = require('webpack-merge');
 const mergeConfig = require(`./build/webpack.${_mode}.js`);
 const isDev = _mode === 'development';
 
+//公共选项配置区域
+let cssLoaders = [
+  MiniCssExtractPlugin.loader,
+  {
+      loader: 'css-loader',
+      options: {
+          importLoaders: 1,
+      },
+  },
+  {
+      loader: 'postcss-loader',
+  },
+];
+
 const baseConfig = {
   entry: {
     app: resolve(__dirname, 'src/main.js'),
@@ -28,64 +42,21 @@ const baseConfig = {
   module: {
     rules: [
       {
-        test: /\.(ttf|pdf|mp3|mp4|avi)$/i,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name]_[contenthash:5].[ext]',
-              outputPath: 'files/',
-              esModule: false,
-            },
-          },
-        ],
+        test: /\.(ts|js|tsx)$/,
+        use: 'babel-loader'
       },
       {
-        test: /\.(png|jpe?g|gif|svg)$/i,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              name: 'images/[name]_[contenthash:5].[ext]',
-              limit: 8192,
-              esModule: false,
-            },
-          },
-        ],
+        test: /\.(png|jpg|jpeg|gif|eot|woff|woff2|ttf|svg|otf)$/,
+        type: 'asset',
+      },
+      {
+        test: /\.css$/,
+        use: cssLoaders,
       },
       {
         test: /\.vue$/,
         use: 'vue-loader',
-      },
-      {
-        test: /\.(js)$/,
-        exclude: /(node_modules|bower_components)/,
-        use: [
-          'thread-loader',
-          'cache-loader',
-          {
-            loader: 'babel-loader',
-          },
-        ],
-        include: [resolve(__dirname, 'src')],
-      },
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              // esModule: false,
-            },
-          },
-          {
-            loader: 'css-loader',
-          },
-          {
-            loader: 'postcss-loader',
-          },
-        ],
-      },
+      }
     ],
   },
   plugins: [new VueLoaderPlugin(), new ProgressBarPlugin()],

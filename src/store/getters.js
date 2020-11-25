@@ -1,9 +1,4 @@
 let getters = {
-  count: function count(state) {
-    return state.welcome.count;
-  },
-  table: function table(state) {
-    return state.table.table;
-  }
+  token: state => state.user.token,
 };
 export default getters;

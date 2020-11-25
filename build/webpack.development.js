@@ -2,6 +2,7 @@ const { resolve } = require('path');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const notifier = require('node-notifier');
+const webpack = require('webpack');
 
 let port = 8080;
 
@@ -12,11 +13,16 @@ const devConfig = {
     hot: true,
     compress: true,
     port,
+    open: true
   },
   performance: {
     hints: false,
   },
   plugins: [
+    new webpack.DefinePlugin({
+      DEVELOPMENT: JSON.stringify(true),
+      PRODUCTION: JSON.stringify(false),
+    }),
     new HtmlWebpackPlugin({
       template: resolve(__dirname, '..', 'public/dev.html'),
       filename: 'index.html',
@@ -33,7 +39,7 @@ const devConfig = {
           return;
         }
         notifier.notify({
-          title: 'Webpack React',
+          title: 'Webpack Vue2',
           message: 'Webpack Compile Error',
           icon: '', // Absolute path (doesn't work on balloons)
           sound: true, // Only Notification Center or Windows Toasters

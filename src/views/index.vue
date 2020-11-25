@@ -1,10 +1,15 @@
 <template>
     <div class="index">
-        123
+        <svg-icon icon-class="user" />
     </div>
 </template>
+
 <script>
 export default {
-    name: 'Index'
+    name: 'Index',
 }
 </script>
+
+<style lang="">
+    
+</style>

@@ -2,10 +2,10 @@ const { resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const webpack = require('webpack')
 
 const prodConfig = {
   mode: 'production',
@@ -24,6 +24,10 @@ const prodConfig = {
     new CompressionPlugin({
       test: /\.js(\?.*)?$/i,
       filename: 'js/[base].gz',
+    }),
+    new webpack.DefinePlugin({
+      DEVELOPMENT: JSON.stringify(false),
+      PRODUCTION: JSON.stringify(true),
     }),
     new HtmlWebpackPlugin({
       template: resolve(__dirname, '..', 'public/prod.html'),
