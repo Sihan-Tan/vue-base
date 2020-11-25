@@ -3,7 +3,8 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const argv = require('yargs-parser')(process.argv.slice(2));
-const _mode = argv.mode || 'development';
+const crossEnv = process.env.NODE_ENV;
+const _mode = crossEnv || argv.mode || 'development';
 const { merge } = require('webpack-merge');
 const mergeConfig = require(`./build/webpack.${_mode}.js`);
 const isDev = _mode === 'development';
@@ -61,5 +62,5 @@ const baseConfig = {
   },
   plugins: [new VueLoaderPlugin(), new ProgressBarPlugin()],
 };
-// console.log(merge(baseConfig, mergeConfig));
-module.exports = merge(mergeConfig, baseConfig);
+console.log(merge(baseConfig, mergeConfig).plugins[3]);
+module.exports = merge(baseConfig, mergeConfig);
