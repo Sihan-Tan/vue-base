@@ -84,8 +84,8 @@ const prodConfig = {
           name: 'vendor',
           test: /node_modules/,
           chunks: 'initial',
-          maxSize: 30000,
-          minSize: 10000,
+          maxSize: 20000,
+          minSize: 3000,
           minChunks: 1, //最少引入了1次
         },
         //缓存组

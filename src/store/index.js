@@ -1,13 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import user from './modules/user';
 import getters from './getters';
+import user from './modules/user';
+// importStoreHolder
 
 Vue.use(Vuex);
 let store = new Vuex.Store({
   getters: getters,
   modules: {
-    user
-  }
+    user,
+    // loadStoreHolder
+  },
 });
 export default store;
