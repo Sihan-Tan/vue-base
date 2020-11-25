@@ -4,16 +4,23 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const notifier = require('node-notifier');
 const webpack = require('webpack');
 
-let port = 8080;
+let port = 8888;
 
 const devConfig = {
   mode: 'development',
+  output: {
+    path: resolve(__dirname, '..', 'dist/assets'),
+    filename: 'js/[name]_[contenthash:5].js',
+    publicPath: '/',
+    assetModuleFilename: 'images/[name]_[contenthash:5].[ext]',
+  },
   devServer: {
-    contentBase: resolve(__dirname, 'dist'),
+    contentBase: resolve(__dirname, '..', 'dist'),
     hot: true,
     compress: true,
+    historyApiFallback: true,
     port,
-    open: true
+    open: false,
   },
   performance: {
     hints: false,

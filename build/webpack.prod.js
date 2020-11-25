@@ -2,16 +2,23 @@ const { resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin;
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const webpack = require('webpack')
+const webpack = require('webpack');
 
 const prodConfig = {
   mode: 'production',
+  output: {
+    path: resolve(__dirname, '..', 'dist/assets'),
+    filename: 'js/[name]_[contenthash:5].js',
+    publicPath: './assets/',
+    assetModuleFilename: 'images/[name]_[contenthash:5].[ext]',
+  },
   plugins: [
     new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: [resolve(__dirname, 'dist')],
+      cleanOnceBeforeBuildPatterns: [resolve(__dirname, '..', 'dist')],
     }),
     new OptimizeCssAssetsPlugin({
       assetNameRegExp: /\.css$/g,
@@ -47,6 +54,7 @@ const prodConfig = {
     }),
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
+      reportFilename: '../report.html',
     }),
   ],
   externals: {

@@ -15,7 +15,7 @@ const prodConfig = {
     path: resolve(__dirname, '..', 'stage/assets'),
     filename: 'js/[name]_[contenthash:5].js',
     publicPath: './assets/',
-    assetModuleFilename: 'js/[name]_[contenthash:5].[ext]',
+    assetModuleFilename: 'images/[name]_[contenthash:5].[ext]',
   },
   plugins: [
     new webpack.DllReferencePlugin({
