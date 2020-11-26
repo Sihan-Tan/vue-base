@@ -6,7 +6,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const webpack = require('webpack');
 
 const prodConfig = {
   mode: 'production',
@@ -31,10 +30,6 @@ const prodConfig = {
     new CompressionPlugin({
       test: /\.js(\?.*)?$/i,
       filename: 'js/[base].gz',
-    }),
-    new webpack.DefinePlugin({
-      DEVELOPMENT: JSON.stringify(false),
-      PRODUCTION: JSON.stringify(true),
     }),
     new HtmlWebpackPlugin({
       template: resolve(__dirname, '..', 'public/prod.html'),
@@ -73,7 +68,7 @@ const prodConfig = {
       name: 'runtime',
     },
     splitChunks: {
-      chunks: 'async',
+      chunks: 'all',
       minChunks: 1, //最少引入了1次
       name: false,
       //分割代码块
@@ -95,7 +90,13 @@ const prodConfig = {
           name: 'common',
           maxInitialRequests: 5,
           // minSize: 0, //大小超过100个字节
-          minChunks: 2, //最少引入了3次
+          minChunks: 2, //最少引入了2次
+        },
+        axios: {
+          chunks: 'initial',
+          name: 'axios',
+          minChunks: 1, //最少引入了1次
+          priority: 2,
         },
       },
     },

@@ -6,7 +6,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const webpack = require('webpack');
 const stageDir = resolve(__dirname, '..', 'stage');
 
 const prodConfig = {
@@ -18,11 +17,8 @@ const prodConfig = {
     assetModuleFilename: 'images/[name]_[contenthash:5].[ext]',
   },
   plugins: [
-    new webpack.DllReferencePlugin({
-      manifest: resolve(stageDir, 'dll', 'manifest.json'),
-    }),
     new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: [stageDir, `!${stageDir}/dll`],
+      cleanOnceBeforeBuildPatterns: [stageDir],
     }),
     new OptimizeCssAssetsPlugin({
       assetNameRegExp: /\.css$/g,
@@ -69,7 +65,7 @@ const prodConfig = {
       // name: 'manifest',
     },
     splitChunks: {
-      chunks: 'async',
+      chunks: 'all',
       minChunks: 1, //最少引入了1次
       name: false,
       //分割代码块
@@ -92,6 +88,30 @@ const prodConfig = {
           maxInitialRequests: 5,
           // minSize: 0, //大小超过100个字节
           minChunks: 2, //最少引入了3次
+        },
+        vue: {
+          chunks: 'initial',
+          test: /node_modules\/vue/,
+          name: 'vue',
+          priority: 2,
+          minSize: 0,
+          minChunks: 1,
+        },
+        vuex: {
+          chunks: 'initial',
+          test: /node_modules\/vuex/,
+          name: 'vuex',
+          priority: 2,
+          minSize: 0,
+          minChunks: 1,
+        },
+        'vue-router': {
+          chunks: 'initial',
+          test: /node_modules\/vue-router/,
+          name: 'vue-router',
+          priority: 2,
+          minSize: 0,
+          minChunks: 1,
         },
       },
     },

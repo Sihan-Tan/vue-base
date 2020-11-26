@@ -5,8 +5,8 @@ import user from './modules/user';
 // importStoreHolder
 
 Vue.use(Vuex);
-let store = new Vuex.Store({
-  getters: getters,
+const store = new Vuex.Store({
+  getters,
   modules: {
     user,
     // loadStoreHolder

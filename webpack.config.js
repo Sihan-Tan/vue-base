@@ -10,11 +10,26 @@ const mergeConfig = require(`./build/webpack.${_mode}.js`);
 
 //公共选项配置区域
 let cssLoaders = [
-  MiniCssExtractPlugin.loader,
+  {
+    loader: MiniCssExtractPlugin.loader,
+    options: {
+      // esModule: false,
+      publicPath: '../',
+    },
+  },
   {
     loader: 'css-loader',
     options: {
       importLoaders: 1,
+    },
+  },
+  {
+    loader: 'less-loader',
+    options: {
+      lessOptions: {
+        modifyVars: {},
+        javascriptEnabled: true,
+      },
     },
   },
   {
@@ -51,7 +66,7 @@ const baseConfig = {
         type: 'asset',
       },
       {
-        test: /\.css$/,
+        test: /\.(css|less)$/,
         use: cssLoaders,
       },
       {
@@ -68,5 +83,6 @@ const baseConfig = {
     new ProgressBarPlugin(),
   ],
 };
-// console.log(merge(baseConfig, mergeConfig).plugins);
+
+console.log(merge(baseConfig, mergeConfig).mode);
 module.exports = merge(baseConfig, mergeConfig);

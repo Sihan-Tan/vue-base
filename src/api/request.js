@@ -3,7 +3,10 @@ import store from '@/store';
 import { getToken } from '@/utils/storage';
 
 const service = Axios.create({
-  baseURL: process.env.NODE_ENV === `prod` ? `` : `http://localhost:8080`,
+  baseURL:
+    process.env.NODE_ENV === 'production'
+      ? '//dev.greenvalley.com'
+      : 'http://localhost:8080',
   timeout: 5000,
 });
 
@@ -15,9 +18,7 @@ service.interceptors.request.use(
 
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error),
 );
 
 service.interceptors.response.use(
@@ -26,13 +27,10 @@ service.interceptors.response.use(
     if (res.code !== 200) {
       return Promise.reject(new Error(res.info || 'Error'));
       // 弹出错误
-    } else {
-      return res;
     }
+    return res;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error),
 );
 
 export default service;

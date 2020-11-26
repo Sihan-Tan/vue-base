@@ -17,6 +17,7 @@ const devConfig = {
   devServer: {
     contentBase: resolve(__dirname, '..', 'dist'),
     hot: true,
+    quiet: true,
     compress: true,
     historyApiFallback: true,
     port,

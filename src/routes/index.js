@@ -4,7 +4,8 @@ import Index from '@/views/index.vue';
 // importRouteHolder
 
 Vue.use(VueRouter);
-let router = new VueRouter({
+const router = new VueRouter({
+  mode: 'hash',
   routes: [
     {
       path: '/',

@@ -6,12 +6,18 @@
 </template>
 
 <script>
+import { demo } from '@/api/index';
+
 export default {
-    name: 'Index',
-}
+  name: 'Index',
+  mounted() {
+    demo();
+  },
+};
 </script>
-<style lang="css">
+<style lang="less">
 .index {
-  background-image: url('../assets/images/123.jpg');
+  color: white;
+  background-image: url("~@/assets/images/123.jpg");
 }
 </style>
