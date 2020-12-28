@@ -7,6 +7,15 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
+const cdn = {
+  js: [
+    'https://unpkg.com/vue@2.6.12/dist/vue.min.js',
+    'https://unpkg.com/vue-router@3.4.9/dist/vue-router.min.js',
+    'https://unpkg.com/vuex@3.5.1/dist/vuex.min.js',
+    'https://unpkg.com/axios@0.21.1/dist/axios.min.js'
+  ]
+}
+
 const prodConfig = {
   mode: 'production',
   output: {
@@ -34,6 +43,7 @@ const prodConfig = {
     new HtmlWebpackPlugin({
       template: resolve(__dirname, '..', 'public/prod.html'),
       filename: '../index.html',
+      cdn,
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -56,9 +66,11 @@ const prodConfig = {
     vue: 'Vue',
     vuex: 'Vuex',
     'vue-router': 'VueRouter',
+    axios: 'axios',
   },
   optimization: {
     // minimize: true,
+    concatenateModules: false,
     minimizer: [
       new TerserPlugin({
         parallel: true, // 是否并行打包
@@ -69,6 +81,8 @@ const prodConfig = {
     },
     splitChunks: {
       chunks: 'all',
+      maxSize: 30000,
+      minSize: 20000,
       minChunks: 1, //最少引入了1次
       name: false,
       //分割代码块
@@ -79,7 +93,7 @@ const prodConfig = {
           name: 'vendor',
           test: /node_modules/,
           chunks: 'initial',
-          maxSize: 20000,
+          maxSize: 30000,
           minSize: 3000,
           minChunks: 1, //最少引入了1次
         },
@@ -91,12 +105,6 @@ const prodConfig = {
           maxInitialRequests: 5,
           // minSize: 0, //大小超过100个字节
           minChunks: 2, //最少引入了2次
-        },
-        axios: {
-          chunks: 'initial',
-          name: 'axios',
-          minChunks: 1, //最少引入了1次
-          priority: 2,
         },
       },
     },

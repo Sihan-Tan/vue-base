@@ -2,14 +2,18 @@ const { resolve } = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
-const crossEnv = process.env.NODE_ENV;
-const _mode = crossEnv || 'dev';
-console.table(_mode);
-const { merge } = require('webpack-merge');
-const mergeConfig = require(`./build/webpack.${_mode}.js`);
+const StylelintPlugin = require('stylelint-webpack-plugin');
 
-//公共选项配置区域
-let cssLoaders = [
+
+const crossEnv = process.env.NODE_ENV;
+const mode = crossEnv || 'dev';
+const { merge } = require('webpack-merge');
+
+// eslint-disable-next-line import/no-dynamic-require
+const mergeConfig = require(`./build/webpack.${mode}.js`);
+
+// 公共选项配置区域
+const cssLoaders = [
   {
     loader: MiniCssExtractPlugin.loader,
     options: {
@@ -42,6 +46,7 @@ const baseConfig = {
     app: resolve(__dirname, 'src/main.js'),
   },
   resolve: {
+    modules: [resolve(__dirname, 'node_modules')],
     alias: {
       vue: 'vue/dist/vue.esm.js',
       '@': resolve(__dirname, 'src'),
@@ -62,8 +67,12 @@ const baseConfig = {
         include: [resolve(__dirname, 'src')],
       },
       {
-        test: /\.(png|jpg|jpeg|gif|eot|woff|woff2|ttf|svg|otf)$/,
-        type: 'asset',
+        test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
+        type: 'asset/inline',
       },
       {
         test: /\.(css|less)$/,
@@ -81,6 +90,16 @@ const baseConfig = {
       filename: 'css/[name]_[contenthash:5].css',
     }),
     new ProgressBarPlugin(),
+    new StylelintPlugin({
+      configFile: './stylelint.config.js',
+      files: 'src/**/*.(vue|less)',
+      fix: true,
+      emitError: true,
+      emitWarning: true,
+      failOnError: true,
+      failOnWarning: true,
+      quiet: false,
+    }),
   ],
 };
 

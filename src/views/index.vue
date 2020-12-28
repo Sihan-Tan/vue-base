@@ -16,7 +16,7 @@ export default {
 };
 </script>
 <style lang="less">
-.index {
+.index-a-s {
   color: white;
   background-image: url("~@/assets/images/123.jpg");
 }

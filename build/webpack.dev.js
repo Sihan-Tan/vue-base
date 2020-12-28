@@ -3,17 +3,18 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const notifier = require('node-notifier');
 const webpack = require('webpack');
-
-let port = 8888;
+const port = 8888;
 
 const devConfig = {
   mode: 'development',
   output: {
     path: resolve(__dirname, '..', 'dist/assets'),
+    pathinfo: false,
     filename: 'js/[name]_[contenthash:5].js',
     publicPath: '/',
     assetModuleFilename: 'images/[name]_[contenthash:5].[ext]',
   },
+  devtool: 'eval-cheap-module-source-map',
   devServer: {
     contentBase: resolve(__dirname, '..', 'dist'),
     hot: true,
@@ -23,18 +24,27 @@ const devConfig = {
     port,
     open: false,
   },
+  cache: {
+    type: 'memory',
+  },
+  optimization: {
+    runtimeChunk: true,
+    removeAvailableModules: false,
+    removeEmptyChunks: false,
+    splitChunks: false
+  },
   performance: {
     hints: false,
   },
   plugins: [
-    new webpack.DefinePlugin({
-      DEVELOPMENT: JSON.stringify(true),
-      PRODUCTION: JSON.stringify(false),
-    }),
     new HtmlWebpackPlugin({
       template: resolve(__dirname, '..', 'public/dev.html'),
       filename: 'index.html',
     }),
+    new webpack.DllReferencePlugin({
+			// context: resolve(__dirname, "..", "dll"),
+			manifest: require("../dll/vue-manifest.json") // eslint-disable-line
+		}),
     new FriendlyErrorsPlugin({
       compilationSuccessInfo: {
         notes: [
@@ -42,7 +52,8 @@ const devConfig = {
         ],
         messages: [`You application is running here http://localhost:${port}`],
       },
-      onErrors: function(severity, errors) {
+      onErrors(severity, errors) {
+        console.log(errors);
         if (severity !== 'error') {
           return;
         }
@@ -51,7 +62,7 @@ const devConfig = {
           message: 'Webpack Compile Error',
           icon: '', // Absolute path (doesn't work on balloons)
           sound: true, // Only Notification Center or Windows Toasters
-          wait: true, // Wait with callback, until user action is taken against notification, does not apply to Windows Toasters as they always wait or notify-send as it does not support the wait option
+          wait: true,
         });
       },
       clearConsole: true,
