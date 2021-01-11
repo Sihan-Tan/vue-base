@@ -3,10 +3,11 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
+const webpack = require('webpack');
 
-
-const crossEnv = process.env.NODE_ENV;
-const mode = crossEnv || 'dev';
+const isDev = process.env.RUN_ENV === 'dev';
+console.log(process.env.RUN_ENV);
+const mode = isDev ? 'dev' : 'prod';
 const { merge } = require('webpack-merge');
 
 // eslint-disable-next-line import/no-dynamic-require
@@ -17,7 +18,7 @@ const cssLoaders = [
   {
     loader: MiniCssExtractPlugin.loader,
     options: {
-      // esModule: false,
+      esModule: false,
       publicPath: '../',
     },
   },
@@ -58,7 +59,7 @@ const baseConfig = {
       {
         test: /\.(ts|js|tsx)$/,
         use: [
-          'thread-loader',
+          // 'thread-loader',
           'cache-loader',
           {
             loader: 'babel-loader',
@@ -71,8 +72,19 @@ const baseConfig = {
         type: 'asset/resource',
       },
       {
-        test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
+        test: /\.(woff(2)?|eot|ttf|otf)$/,
         type: 'asset/inline',
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'svg-sprite-loader',
+            options: {
+              symbolId: 'icon-[name]',
+            },
+          },
+        ],
       },
       {
         test: /\.(css|less)$/,
@@ -89,6 +101,11 @@ const baseConfig = {
     new MiniCssExtractPlugin({
       filename: 'css/[name]_[contenthash:5].css',
     }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        RUN_ENV: JSON.stringify(process.env.RUN_ENV),
+      },
+    }),
     new ProgressBarPlugin(),
     new StylelintPlugin({
       configFile: './stylelint.config.js',
@@ -103,5 +120,4 @@ const baseConfig = {
   ],
 };
 
-console.log(merge(baseConfig, mergeConfig).mode);
 module.exports = merge(baseConfig, mergeConfig);

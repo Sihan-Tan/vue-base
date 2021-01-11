@@ -90,31 +90,7 @@ const prodConfig = {
           maxInitialRequests: 5,
           // minSize: 0, //大小超过100个字节
           minChunks: 2, // 最少引入了3次
-        },
-        vue: {
-          chunks: 'initial',
-          test: /node_modules\/vue/,
-          name: 'vue',
-          priority: 2,
-          minSize: 0,
-          minChunks: 1,
-        },
-        vuex: {
-          chunks: 'initial',
-          test: /node_modules\/vuex/,
-          name: 'vuex',
-          priority: 2,
-          minSize: 0,
-          minChunks: 1,
-        },
-        'vue-router': {
-          chunks: 'initial',
-          test: /node_modules\/vue-router/,
-          name: 'vue-router',
-          priority: 2,
-          minSize: 0,
-          minChunks: 1,
-        },
+        }
       },
     },
   },
