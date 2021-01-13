@@ -29,6 +29,9 @@ const cssLoaders = [
     },
   },
   {
+    loader: 'postcss-loader',
+  },
+  {
     loader: 'less-loader',
     options: {
       lessOptions: {
@@ -36,9 +39,6 @@ const cssLoaders = [
         javascriptEnabled: true,
       },
     },
-  },
-  {
-    loader: 'postcss-loader',
   },
 ];
 
@@ -60,7 +60,7 @@ const baseConfig = {
         test: /\.(ts|js|tsx)$/,
         use: [
           // 'thread-loader',
-          'cache-loader',
+          // 'cache-loader',
           {
             loader: 'babel-loader',
           },
@@ -99,7 +99,7 @@ const baseConfig = {
   plugins: [
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
-      filename: 'css/[name]_[contenthash:5].css',
+      filename: 'css/[name].css',
     }),
     new webpack.DefinePlugin({
       'process.env': {

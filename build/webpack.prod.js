@@ -39,6 +39,9 @@ const prodConfig = {
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [cleanPath],
     }),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name]_[contenthash:5].css',
+    }),
     new HtmlWebpackPlugin({
       template: templatePath,
       filename: '../index.html',

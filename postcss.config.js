@@ -4,7 +4,7 @@ module.exports = () => ({
       preset: 'bem',
     },
     'postcss-preset-env': {
-      stage: 0,
+      stage: 3,
       features: {
         'nesting-rules': true,
       },

@@ -10,9 +10,9 @@ const devConfig = {
   output: {
     path: resolve(__dirname, '..', 'dist/assets'),
     pathinfo: false,
-    filename: 'js/[name]_[contenthash:5].js',
+    filename: 'js/[name].js',
     publicPath: '/',
-    assetModuleFilename: 'images/[name]_[contenthash:5].[ext]',
+    assetModuleFilename: 'images/[name].[ext]',
   },
   devtool: 'eval-cheap-module-source-map',
   devServer: {
@@ -25,7 +25,8 @@ const devConfig = {
     open: false,
   },
   cache: {
-    type: 'memory',
+    type: 'filesystem',
+    cacheDirectory: resolve(__dirname, '..', '.temp_cache')
   },
   optimization: {
     runtimeChunk: true,
